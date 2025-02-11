@@ -1,0 +1,54 @@
+#+TITLE: Emacs config tester
+
+This repo provides =ecd.sh=
+
+* SYNOPSIS
+
+#+begin_src shell
+ecd.sh EMACS_DIRECTORY -s
+ecd.sh EMACS_DIRECTORY ARGS...
+#+end_src
+
+* DESCRIPTION
+
+Launch Emacs with =EMACS_DIRECTORY= as the =user-emacs-directory= and
+=EMACS_DIRECTORY/elpa= as =package-user-dir=.
+
+This allows testing other configs including installation of packages with
+=package-install= or =use-package= without touching one's own Emacs directory.
+
+With the =-s= argument, the script starts an emacs daemon with socket in
+=emacs-socket/$(basename $EMACS_DIRECTORY)= relative to the script's location.
+
+Without the =-s= argument, the script runs =emacsclient= with the same socket.
+
+* Cool things
+
+** Multiple daemons
+
+With this setup we can have multiple emacs daemons running at the same time as
+long as we take care to use =EMACS_DIRECTORY='s that have different basenames.
+
+** Normal init file
+
+The =init.el= that gets tested by this tool has no idea that it is not in the
+normal place and does not need to contain anything to make this possible.
+
+This is because all the setup is done using =--eval "(...)"= in the =emacs
+--daemon ...= command.
+
+This way, we can prepare an emacs config file for someone.
+
+* Random notes
+
+** The name
+
+The name is for "emacs-client-daemon"
+
+** Why I made this
+
+I wanted to show people various features or packages but my config has lots of
+stuff.  So when I want to figure out a minimal config to do cool stuff with the
+org agenda, I use this to work on one.  Then I can show it to people.
+
+That way I have a set of such configs and I can work on them independantly.
