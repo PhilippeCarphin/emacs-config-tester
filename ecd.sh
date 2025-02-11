@@ -3,8 +3,7 @@
 # First argument is a directory that will be used as the user-emacs-directory
 # If second argument is -s, then start the emacs daemon
 #
-user_emacs_directory=$(cd $1 && pwd)
-shift
+user_emacs_directory=$(cd $1 && pwd) ; shift
 
 if ! [ -e ${user_emacs_directory}/init.el ] ; then
     echo "ERROR: No init.el in user_emacs_directory ($1 must be the path of an emacs config dir)"
@@ -29,17 +28,14 @@ socket_name=$(basename $user_emacs_directory)-socket
 socket=${socket_dir}/${socket_name}
 
 # Intercept for certain first arguments
-case $1 in
-    -s)
-        emacs --daemon=$socket \
-              -q \
-              --eval "(setq user-emacs-directory \"${user_emacs_directory}/\")" \
-              --eval "(setq user-init-file \"${user_emacs_directory}/init.el\")" \
-              --eval "(setq package-user-dir \"${user_emacs_directory}/elpa\")" \
-              -l "${user_emacs_directory}/init.el" \
-              --eval "(message \"'ecd.sh ${user_emacs_directory} -s'(emacs --daemon): Everything was loaded\")"
-        exit 0
-        ;;
-esac
-
-emacsclient -s $socket "$@"
+if [[ "$1" == "-s" ]] ; then
+    emacs --daemon=$socket \
+          -q \
+          --eval "(setq user-emacs-directory \"${user_emacs_directory}/\")" \
+          --eval "(setq user-init-file \"${user_emacs_directory}/init.el\")" \
+          --eval "(setq package-user-dir \"${user_emacs_directory}/elpa\")" \
+          -l "${user_emacs_directory}/init.el" \
+          --eval "(message \"'ecd.sh ${user_emacs_directory} -s'(emacs --daemon): Everything was loaded\")"
+else
+    emacsclient -s $socket "$@"
+fi
