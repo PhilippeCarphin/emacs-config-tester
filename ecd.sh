@@ -36,7 +36,7 @@ case $1 in
               --eval "(setq user-emacs-directory \"${user_emacs_directory}/\")" \
               --eval "(setq user-init-file \"${user_emacs_directory}/init.el\")" \
               --eval "(setq package-user-dir \"${user_emacs_directory}/elpa\")" \
-              -l $user_emacs_directory/init.el \
+              -l "${user_emacs_directory}/init.el" \
               --eval "(message \"'ecd.sh ${user_emacs_directory} -s'(emacs --daemon): Everything was loaded\")"
         exit 0
         ;;
