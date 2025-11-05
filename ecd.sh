@@ -21,14 +21,18 @@ fi
 # $TMPDIR/emacs$(id -u) with 700 permissions.  If socket contains a slash and is
 # not inside a 700 directory, emacs will complain and not start the server.
 this_dir=$(cd -P $(dirname $0) && pwd)
-socket_dir=${this_dir}/emacs-sockets
-mkdir -p ${socket_dir}
-chmod 700 ${socket_dir}
+set -x
+
+
 socket_name=$(basename $user_emacs_directory)-socket
-socket=${socket_dir}/${socket_name}
 
 # Intercept for certain first arguments
 if [[ "$1" == "-s" ]] ; then
+    if ! socket_dir=$(mktemp -d ${TMPDIR}/emacs-sockets.XXXXXX) ; then
+        exit 1
+    fi
+    # chmod 700 ${socket_dir}
+    socket=${socket_dir}/${socket_name}
     emacs --daemon=$socket \
           -q \
           --eval "(setq user-emacs-directory \"${user_emacs_directory}/\")" \
@@ -36,6 +40,17 @@ if [[ "$1" == "-s" ]] ; then
           --eval "(setq package-user-dir \"${user_emacs_directory}/elpa\")" \
           -l "${user_emacs_directory}/init.el" \
           --eval "(message \"'ecd.sh ${user_emacs_directory} -s'(emacs --daemon): Everything was loaded\")"
+    printf "${socket_name} ${socket}\n" >> ${this_dir}/sockets
 else
+    socket=""
+    while read name s ; do
+        if [[ ${name} == ${socket_name} ]] ; then
+            socket=${s}
+        fi
+    done < ${this_dir}/sockets
+    if [[ -z ${socket} ]] ; then
+        printf "Could not get socket path for ${socket_name}\n"
+        exit 1
+    fi
     emacsclient -s $socket "$@"
 fi
