@@ -21,6 +21,13 @@ mkdir -p ${this_tmpdir}
 #
 # This stops happening if I move everything directly in my HOME which makes the
 # paths shorter.
+link-dir(){
+    local src=$1
+    local dst=$2
+    for f in ${src}/* ; do
+        ln -sv ${f} ${dst}/${f##*/}
+    done
+}
 
 main(){
     for arg in "$@" ; do
@@ -33,16 +40,17 @@ main(){
     action=$1 ; shift
     socket_name=$(basename "${dir}")-socket
     test_dir=${this_tmpdir}/$(basename ${dir})
+    mkdir -p ${test_dir}
 
     case "${action}" in
         -s)
             if [[ -d "${test_dir}" ]] || [[ -f "${test_dir}" ]] ; then
                 echo "Cannot create test directory: Already exists"
             fi
-            cp -R "${dir}" "${test_dir}"
+            link-dir "$(realpath ${dir})" "${test_dir}"
             emacs --daemon=${socket_name} --init-directory "${test_dir}" "$@" ;;
 
-        -e) cp -R "${dir}" "${test_dir}"
+        -e) link-dir "$(realpath ${dir})" "${test_dir}"
             emacs --init-directory "${test_dir}" "$@"
             ask_delete_dir "${test_dir}" ;;
 

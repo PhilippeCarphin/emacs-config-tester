@@ -1,0 +1,99 @@
+#+TITLE: Org Agenda
+
+* Orgmode
+
+** Avertissement
+
+Org mode offre beaucoup de possibilités, on va en utiliser un petit
+sous-ensemble donc pas besoin de se rappeler de tout, mais c'est bon de savoir
+que ça existe.  Par exemple même si on sait pas comment faire des recherches de
+tags, si on sait qu'on peut le faire, on peut ajouter des tags à nos affaires
+même si on s'en sert pas tout de suite.
+
+** L'arbre
+
+Les sections, sous-sections, sous-sous-sections etc. forment un arbre.
+
+Dans le langage Org le mot *headline* désigne une section de n'importe quelle
+mais seulement le titre (la ligne avec des étoiles)
+
+*** Propriétés d'un noeud de l'arbre
+
+- La ligne avec les étoiles est appelée "headline" et son contenu est "the body
+  of the headline".
+- Elle peut avoir un "todo keyword".  Par défaut les "todo keywords" sont "DONE"
+  et "TODO".  On peut changer les "todo" keywords avec =(setq org-todo-keywords ...)=
+- Les headlines peuvent avoir des tags.
+
+La forme est (sur une seule ligne)
+- Un ou plusieurs étoiles au tout début de la ligne
+- Un ou plusieurs espaces
+- Un todo keyword optionnel
+- Du texte
+- Des tags sous la forme :tag1:tag2:...:
+
+Ceci permet de faire des recherches, par exemple
+- Tous les headlines qui ont tel TODO keyword
+- Tous les headlines qui ont tel TODO keyword et qui ne sont pas scédulées
+- Tous les headlines qui ont un certain tag
+- et plein d'autres possibilités
+
+*** Body de headline
+
+Le texte à l'intérieur d'un headline peut être rendu un peu plus nice si on
+veut:
+- *bold*
+- /italic/
+- =code=
+
+** Visibilité
+
+On peut changer ce qui est visible
+- Avec le curseur sur un headline, =TAB= va cycliquement changer la visibilité
+  du headline en question. Essaye le dans ce document
+- Avec le curseur n'importe ou, =SHIFT-TAB= va cycliquement changer la
+  visibilité de tout le fichier.
+
+** Tout est du texte
+
+Il existe plein de touches pour nous faciliter la vie mais si on ne s'en
+rappelle pas on n'en a pas besoin, on peut juste écrire le mot TODO ou DONE et
+ne pas utiliser =C-c C-t=.
+
+Même chose pout toutes les autres choses.
+
+** Conclusion org-mode
+
+Le fait d'avoir un arbre de headlines et de pouvoir changer la visibilité est
+très puissant.  Deux touches à se rappeler: =TAB= et =SHIFT-TAB=.
+
+On a plusieurs autres choses qu'on peut faire mais juste avec ça, c'est très
+puissant pour organiser beaucoup d'information.
+
+* Agenda
+
+Si on ajoute des propriétés "SCHEDULED <date + maybe time>" ou "DEADLINE <date +
+maybe time + maybe lead time>", on peut avoir différentes vues d'agenda qui nous
+présentent nos affaires de façon cool.
+
+- Sur un headline C-c C-s va "scéduler" un headline.
+  - Dans le petit calendrier qui apparaît, SHIFT-Gauche/Droite va changer la
+    date sélsectionnée et ALT-SHIFT-gauche/droite va bouger par mois.
+  - Toujours lorsqu'on est dans le petit calendrier, on peut entrer une heure au
+    clavier en format HH:MM.
+  - C'est du texte!  Si on s'est trompé, on peut juste éditer le texte qui a été
+    ajouté.
+- Sur un headline C-c C-d va mettre un deadline sur le headline.
+  - Ça fait apparaître le même petit calendrier avec les mêmes touches.
+  - On peut aussi ajouter '+20d' pour dire "je veux pas voir cet item dans
+    l'agenda avant qu'on arrive à 20 jours de la date donnée.
+- Un headline peut avoir les deux propriétés SCHEDULED et DEADLINE.
+
+* Conclusion
+
+Crois moi, c'est extrêmement puissant ce qu'on peut faire avec juste
+- Headlines avec des étoiles, un TODO keyword, et peut-être des tags
+- Tab et Shift Tab pour changer la visibilité
+- C-c C-s et C-c C-d pour séduler ou mettre un deadline.
+et pas besoin de se rappeler des touches.
+
